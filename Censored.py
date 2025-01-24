@@ -20,8 +20,9 @@ hist = hist / np.sum(hist)
 # Sum of all bins below and up to  -1
 censored = np.sum(hist[bin_centers <= -1])
 
+# Initialize a variable to store the first center to the right of -1
+first_center_right_of_minus_one = None
 
-print(censored)
 
 # if the bins are below -1, make them transparent, otherwise make them solid
 for i, center in enumerate(bin_centers):
@@ -29,11 +30,16 @@ for i, center in enumerate(bin_centers):
         plt.bar(center, hist[i], width=0.2, alpha=0.5, color="none", edgecolor='black', linestyle=":")
     else:
         plt.bar(center, hist[i], width=0.2, color='b', alpha=0.9, edgecolor='black')
-    # if the bin is at -1, also plot the new bin
-    if -1 < center < -0.89:
+
+    # Identify the first center to the right of -1
+    if -1 < center and first_center_right_of_minus_one is None:
+        first_center_right_of_minus_one = center
+
+        # Plot the censored area
         plt.bar(center, censored, width=0.2, color="orange", alpha=0.3)
+
+        # Add a non-transparent line
         plt.bar(center, censored, width=0.2, color="none", edgecolor='black')
-        print(center)
 
 
 
